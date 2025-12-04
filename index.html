@@ -5,30 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animated Greeting</title>
     <style>
-        /* Global Styles */
+        /* --- GLOBAL & BODY STYLES (FIXED) --- */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            /* Removed 'display: flex' from body to prevent side-by-side layout */
             height: 100vh;
             text-align: center;
             transition: background-color 0.5s;
         }
 
-        /* Initial Page (Page 1) Styles */
+        /* --- PAGE LAYOUT BASE (NEW/FIXED) --- */
+        /* This ensures all pages cover 100% of the screen and stack perfectly */
+        #page1, #page2, #page3 {
+            position: absolute; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex; /* Keeps content centered on the active page */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Important for Page 3's animation */
+        }
+
+        /* --- PAGE 1 SPECIFIC STYLES --- */
         #page1 {
             background-color: #f8d7da; /* Light Red/Pink Background */
             color: #dc3545; /* Red Heart Color */
             font-size: 10em;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
         }
         
         #goButton1 {
@@ -40,23 +47,21 @@
             cursor: pointer;
             border-radius: 5px;
             margin-top: 20px;
-            opacity: 0; /* Starts hidden */
+            opacity: 0;
             transition: opacity 0.5s;
         }
 
-        /* Second Page (Page 2) Styles */
+        /* --- PAGE 2 SPECIFIC STYLES --- */
         #page2 {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
+            display: none; /* Initially hidden */
+            background-color: white; /* Ensure solid background to cover page 1 */
+            color: #000;
         }
 
         #emoji {
-            font-size: 0em; /* Starts tiny for zoom effect */
-            transition: transform 1s ease-out, font-size 0.5s;
+            font-size: 3em; /* Base size */
+            transform: scale(0); /* Start hidden/small for the animation to control */
+            transition: transform 1s ease-out;
             display: block;
         }
 
@@ -74,16 +79,13 @@
             cursor: pointer;
             border-radius: 5px;
             margin-top: 20px;
-            opacity: 0; /* Starts hidden */
+            opacity: 0;
             transition: opacity 0.5s;
         }
 
-        /* Third Page (Page 3) Styles */
+        /* --- PAGE 3 SPECIFIC STYLES --- */
         #page3 {
-            display: none;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            display: none; /* Initially hidden */
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
             animation: gradient-animation 15s ease infinite;
@@ -91,9 +93,6 @@
             font-size: 2.5em;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         @keyframes gradient-animation {
@@ -144,27 +143,23 @@
                 
                 // --- Page 2 Logic ---
                 
-                // Set initial state for the 'zoom back' effect
+                // Start the emoji at scale 10 and animate it back to scale 2
                 emoji.style.transform = 'scale(10)'; 
-                emoji.style.fontSize = '3em'; // Base visible size
                 
-                // After a very short delay, apply the final state (2x zoom close)
                 setTimeout(() => {
-                    // Set the transition to handle the 'zoom back' animation
+                    // Start the transition and set the final scale to 2x (closing the zoom)
                     emoji.style.transition = 'transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                    emoji.style.transform = 'scale(2)'; // The final stop size (2x zoom)
+                    emoji.style.transform = 'scale(2)'; 
                 }, 50);
 
                 // Wait for the emoji animation to finish (1 second) then show the text and next button
                 setTimeout(() => {
-                    // Show the welcome text
                     welcomeText.style.opacity = 1; 
 
-                    // Show the second button after the text appears
                     setTimeout(() => {
                         goButton2.style.opacity = 1;
                     }, 500); 
-                }, 1000); // 1 second for the emoji zoom animation
+                }, 1000); 
 
             });
 
@@ -174,8 +169,6 @@
             goButton2.addEventListener('click', () => {
                 page2.style.display = 'none';
                 page3.style.display = 'flex';
-                document.body.style.height = '100vh'; 
-                document.body.style.backgroundColor = 'transparent'; 
             });
         });
     </script>
